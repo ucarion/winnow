@@ -27,5 +27,15 @@ describe Winnow::Fingerprinter do
 
       expect(fprint_hashes).to eq hashes
     end
+
+    it 'chooses the smallest hash per window' do
+      # window size = t - k + 1 = 2 ; for a two-char string, the sole
+      # fingerprint should just be from the char with the smallest hash value
+      fprinter = Winnow::Fingerprinter.new(t: 2, k: 1)
+      fprints = fprinter.fingerprints("ab")
+
+      expect(fprints.length).to eq 1
+      expect(fprints.first.value).to eq ["a", "b"].map(&:hash).min
+    end
   end
 end
