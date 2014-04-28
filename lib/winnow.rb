@@ -1,5 +1,5 @@
 require 'winnow/version'
+require 'winnow/fingerprinter'
 
 module Winnow
-  # Your code goes here...
 end
