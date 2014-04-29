@@ -42,8 +42,6 @@ describe Winnow::Fingerprinter do
       fprinter = Winnow::Fingerprinter.new(t: 1, k: 1)
       fprints = fprinter.fingerprints("a\nb\ncde\nfg")
 
-      fprints.each { |f| p f }
-
       fprint_d = fprints.find { |fprint| fprint.value == "d".hash }
 
       expect(fprint_d.location.line).to eq 2
