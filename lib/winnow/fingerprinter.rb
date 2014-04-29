@@ -29,10 +29,12 @@ module Winnow
 
     def k_grams(str)
       current_line = 0
-      # this starts at -1 to make the #map logic simpler
-      current_col = -1
+      current_col = 0
 
       str.chars.each_cons(noise).map do |k_gram|
+        fingerprint = Fingerprint.new(k_gram.join.hash,
+          Location.new(current_line, current_col))
+
         if k_gram.first == "\n"
           current_line += 1
           current_col = 0
@@ -40,8 +42,7 @@ module Winnow
           current_col += 1
         end
 
-        Fingerprint.new(k_gram.join.hash,
-          Location.new(current_line, current_col))
+        fingerprint
       end
     end
   end
