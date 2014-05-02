@@ -39,5 +39,14 @@ describe Winnow::Matcher do
 
       expect(match).to be_nil
     end
+
+    it 'reports all matches when multi matches' do
+      match = matches.find do |match|
+        match.matches_from_a.first.value == 1
+      end
+
+      expect(match.matches_from_a.length).to eq 2
+      expect(match.matches_from_b.length).to eq 1
+    end
   end
 end
