@@ -40,12 +40,13 @@ describe Winnow::Fingerprinter do
 
     it 'correctly reports the location of a fingerprint' do
       fprinter = Winnow::Fingerprinter.new(t: 1, k: 1)
-      fprints = fprinter.fingerprints("a\nb\ncde\nfg")
+      fprints = fprinter.fingerprints("a\nb\ncde\nfg", source: "example")
 
       fprint_d = fprints.find { |fprint| fprint.value == "d".hash }
 
       expect(fprint_d.location.line).to eq 2
       expect(fprint_d.location.column).to eq 1
+      expect(fprint_d.location.source).to eq "example"
     end
   end
 end
