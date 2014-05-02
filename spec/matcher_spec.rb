@@ -31,5 +31,13 @@ describe Winnow::Matcher do
       expect(matchloc_a.line).to eq 0
       expect(matchloc_b.line).to eq 3
     end
+
+    it 'reports nothing when there is no match' do
+      match = matches.find do |match|
+        match.matches_from_a.first.value == 3
+      end
+
+      expect(match).to be_nil
+    end
   end
 end
