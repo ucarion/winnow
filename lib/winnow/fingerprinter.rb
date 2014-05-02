@@ -9,8 +9,10 @@ module Winnow
       @noise = params[:noise_threshold] || params[:k]
     end
 
-    def fingerprints(str)
-      windows(str).reduce(Set.new) do |fingerprints, window|
+    def fingerprints(str, params = {})
+      source = params[:source]
+
+      windows(str, source).reduce(Set.new) do |fingerprints, window|
         least_fingerprint = window.min_by { |fingerprint| fingerprint.value }
 
         fingerprints + [least_fingerprint]
@@ -19,21 +21,21 @@ module Winnow
 
     private
 
-    def windows(str)
-      k_grams(str).each_cons(window_size)
+    def windows(str, source)
+      k_grams(str, source).each_cons(window_size)
     end
 
     def window_size
       guarantee - noise + 1
     end
 
-    def k_grams(str)
+    def k_grams(str, source)
       current_line = 0
       current_col = 0
 
       str.chars.each_cons(noise).map do |k_gram|
         fingerprint = Fingerprint.new(k_gram.join.hash,
-          Location.new(current_line, current_col))
+          Location.new(source, current_line, current_col))
 
         if k_gram.first == "\n"
           current_line += 1
