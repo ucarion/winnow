@@ -12,11 +12,17 @@ module Winnow
     def fingerprints(str, params = {})
       source = params[:source]
 
-      windows(str, source).reduce(Set.new) do |fingerprints, window|
-        least_fingerprint = window.min_by { |fingerprint| fingerprint.value }
+      fingerprints = {}
 
-        fingerprints + [least_fingerprint]
+      windows(str, source).each do |window|
+        least_fingerprint = window.min_by { |fingerprint| fingerprint[:value] }
+        value = least_fingerprint[:value]
+        location = least_fingerprint[:location]
+
+        (fingerprints[value] ||= []) << location
       end
+
+      fingerprints
     end
 
     private
@@ -34,8 +40,7 @@ module Winnow
       current_col = 0
 
       str.chars.each_cons(noise).map do |k_gram|
-        fingerprint = Fingerprint.new(k_gram.join.hash,
-          Location.new(source, current_line, current_col))
+        location = Location.new(source, current_line, current_col)
 
         if k_gram.first == "\n"
           current_line += 1
@@ -44,7 +49,7 @@ module Winnow
           current_col += 1
         end
 
-        fingerprint
+        {value: k_gram.join.hash, location: location}
       end
     end
   end
