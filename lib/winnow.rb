@@ -3,9 +3,6 @@ require 'winnow/fingerprinter'
 require 'winnow/matcher'
 
 module Winnow
-  class Fingerprint < Struct.new(:value, :location)
-  end
-
   class Location < Struct.new(:source, :line, :column)
   end
 
