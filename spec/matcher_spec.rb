@@ -41,5 +41,11 @@ describe Winnow::Matcher do
       expect(match.matches_from_a.length).to eq 2
       expect(match.matches_from_b.length).to eq 1
     end
+
+    it 'ignores whitelisted values' do
+      matches = Winnow::Matcher.find_matches(fprint1, fprint2, whitelist: [0])
+
+      expect(matches.keys).to eq [1]
+    end
   end
 end
