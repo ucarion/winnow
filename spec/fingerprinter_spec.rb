@@ -22,10 +22,9 @@ describe Winnow::Fingerprinter do
       fprinter = Winnow::Fingerprinter.new(t: 1, k: 1)
       fprints = fprinter.fingerprints("abcdefg")
 
-      hashes = Set.new(('a'..'g').map(&:hash))
-      fprint_hashes = Set.new(fprints.map(&:value))
+      hashes = ('a'..'g').map(&:hash)
 
-      expect(fprint_hashes).to eq hashes
+      expect(fprints.keys).to eq hashes
     end
 
     it 'chooses the smallest hash per window' do
@@ -34,19 +33,19 @@ describe Winnow::Fingerprinter do
       fprinter = Winnow::Fingerprinter.new(t: 2, k: 1)
       fprints = fprinter.fingerprints("ab")
 
-      expect(fprints.length).to eq 1
-      expect(fprints.first.value).to eq ["a", "b"].map(&:hash).min
+      expect(fprints.keys.length).to eq 1
+      expect(fprints.keys.first).to eq ["a", "b"].map(&:hash).min
     end
 
     it 'correctly reports the location of a fingerprint' do
       fprinter = Winnow::Fingerprinter.new(t: 1, k: 1)
       fprints = fprinter.fingerprints("a\nb\ncde\nfg", source: "example")
 
-      fprint_d = fprints.find { |fprint| fprint.value == "d".hash }
+      fprint_d = fprints['d'.hash].first
 
-      expect(fprint_d.location.line).to eq 2
-      expect(fprint_d.location.column).to eq 1
-      expect(fprint_d.location.source).to eq "example"
+      expect(fprint_d.line).to eq 2
+      expect(fprint_d.column).to eq 1
+      expect(fprint_d.source).to eq "example"
     end
   end
 end
