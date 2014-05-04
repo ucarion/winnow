@@ -2,27 +2,15 @@ module Winnow
   class Matcher
     class << self
       def find_matches(fingerprints_a, fingerprints_b)
-        values_a = value_to_fprint_map(fingerprints_a)
-        values_b = value_to_fprint_map(fingerprints_b)
+        matched_values = fingerprints_a.keys & fingerprints_b.keys
 
-        shared_values = values_a.keys & values_b.keys
+        value_match_pairs = matched_values.map do |value|
+          matches_a, matches_b = fingerprints_a[value], fingerprints_b[value]
 
-        shared_values.map do |value|
-          matches_from_a = values_a[value]
-          matches_from_b = values_b[value]
-
-          MatchDatum.new(matches_from_a, matches_from_b)
+          [value, MatchDatum.new(matches_a, matches_b)]
         end
-      end
 
-      private
-
-      def value_to_fprint_map(fingerprints)
-        mapping = {}
-        fingerprints.each do |fp|
-          (mapping[fp.value] ||= []) << fp
-        end
-        mapping
+        Hash[value_match_pairs]
       end
     end
   end
