@@ -6,13 +6,10 @@ module Winnow
 
         matched_values = fingerprints_a.keys & fingerprints_b.keys - whitelist
 
-        value_match_pairs = matched_values.map do |value|
+        matched_values.map do |value|
           matches_a, matches_b = fingerprints_a[value], fingerprints_b[value]
-
-          [value, MatchDatum.new(matches_a, matches_b)]
+          MatchDatum.new(matches_a, matches_b)
         end
-
-        Hash[value_match_pairs]
       end
     end
   end

@@ -13,31 +13,33 @@ describe Winnow::Matcher do
       3 => [Winnow::Location.new(5, 5)]
     }
 
-    matches = Winnow::Matcher.find_matches(fprint1, fprint2)
+    let(:matches) { Winnow::Matcher.find_matches(fprint1, fprint2) }
 
-    it 'returns a hash of match data' do
-      expect(matches[0]).to be_a(Winnow::MatchDatum)
+    def match_with_loc(line_number, matches = matches)
+      matches.find do |data|
+        data.matches_from_a.find { |loc| loc.line == line_number } ||
+          data.matches_from_b.find { |loc| loc.line == line_number }
+      end
+    end
+
+    it 'returns an array of match data' do
+      expect(matches).to be_an(Array)
+      expect(matches.first).to be_a(Winnow::MatchDatum)
     end
 
     it 'reports a match when values are equal' do
-      match = matches[0]
-
-      matchloc_a = match.matches_from_a.first
+      match = match_with_loc(0)
       matchloc_b = match.matches_from_b.first
-
-      expect(matchloc_a.line).to eq 0
       expect(matchloc_b.line).to eq 3
     end
 
     it 'reports nothing when there is no match' do
-      match = matches[3]
-
+      match = match_with_loc(5)
       expect(match).to be_nil
     end
 
     it 'reports all matches when multi matches' do
-      match = matches[1]
-
+      match = match_with_loc(1)
       expect(match.matches_from_a.length).to eq 2
       expect(match.matches_from_b.length).to eq 1
     end
@@ -45,7 +47,7 @@ describe Winnow::Matcher do
     it 'ignores whitelisted values' do
       matches = Winnow::Matcher.find_matches(fprint1, fprint2, whitelist: [0])
 
-      expect(matches.keys).to eq [1]
+      expect(match_with_loc(0, matches)).to be_nil
     end
   end
 end
