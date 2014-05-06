@@ -1,4 +1,5 @@
 require 'winnow/version'
+require 'winnow/preprocessor'
 require 'winnow/fingerprinter'
 require 'winnow/matcher'
 
