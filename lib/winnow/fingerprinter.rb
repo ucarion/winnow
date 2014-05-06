@@ -36,19 +36,8 @@ module Winnow
     end
 
     def k_grams(str, source)
-      current_line = 0
-      current_col = 0
-
-      str.chars.each_cons(noise).map do |k_gram|
-        location = Location.new(source, current_line, current_col)
-
-        if k_gram.first == "\n"
-          current_line += 1
-          current_col = 0
-        else
-          current_col += 1
-        end
-
+      str.chars.each_cons(noise).each_with_index.map do |k_gram, index|
+        location = Location.new(source, index)
         {value: k_gram.join.hash, location: location}
       end
     end
