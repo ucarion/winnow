@@ -2,23 +2,31 @@ require 'spec_helper'
 
 describe Winnow::Matcher do
   describe '#find_matches' do
-    fprint1 = {
-      0 => [Winnow::Location.new(0, 0)],
-      1 => [Winnow::Location.new(1, 1), Winnow::Location.new(2, 2)],
-    }
+    def make_locations(*indices)
+      indices.map { |n| Winnow::Location.new(nil, n) }
+    end
 
-    fprint2 = {
-      0 => [Winnow::Location.new(3, 3)],
-      1 => [Winnow::Location.new(4, 4)],
-      3 => [Winnow::Location.new(5, 5)]
-    }
+    let(:fprint1) do
+      {
+        0 => make_locations(0),
+        1 => make_locations(1, 2),
+      }
+    end
+
+    let(:fprint2) do
+      {
+        0 => make_locations(3),
+        1 => make_locations(4),
+        3 => make_locations(5)
+      }
+    end
 
     let(:matches) { Winnow::Matcher.find_matches(fprint1, fprint2) }
 
-    def match_with_loc(line_number, matches = matches)
+    def match_with_loc(index, matches = matches)
       matches.find do |data|
-        data.matches_from_a.find { |loc| loc.line == line_number } ||
-          data.matches_from_b.find { |loc| loc.line == line_number }
+        data.matches_from_a.find { |loc| loc.index == index } ||
+          data.matches_from_b.find { |loc| loc.index == index }
       end
     end
 
@@ -30,7 +38,7 @@ describe Winnow::Matcher do
     it 'reports a match when values are equal' do
       match = match_with_loc(0)
       matchloc_b = match.matches_from_b.first
-      expect(matchloc_b.line).to eq 3
+      expect(matchloc_b.index).to eq 3
     end
 
     it 'reports nothing when there is no match' do

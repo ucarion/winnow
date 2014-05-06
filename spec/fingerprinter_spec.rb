@@ -43,8 +43,7 @@ describe Winnow::Fingerprinter do
 
       fprint_d = fprints['d'.hash].first
 
-      expect(fprint_d.line).to eq 2
-      expect(fprint_d.column).to eq 1
+      expect(fprint_d.index).to eq 5
       expect(fprint_d.source).to eq "example"
     end
   end
