@@ -6,4 +6,5 @@ module Winnow
   end
 end
 
-require 'winnow/preprocessors/plaintext_preprocessor'
+require 'winnow/preprocessors/plaintext'
+require 'winnow/preprocessors/source_code'

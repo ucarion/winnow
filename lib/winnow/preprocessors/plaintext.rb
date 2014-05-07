@@ -1,6 +1,6 @@
 module Winnow
   module Preprocessors
-    class PlaintextPreprocessor < Preprocessor
+    class Plaintext < Preprocessor
       def preprocess(str)
         str.chars.each_with_index.to_a
       end

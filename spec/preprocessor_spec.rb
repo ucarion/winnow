@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Winnow::Preprocessors::PlaintextPreprocessor do
-  subject { Winnow::Preprocessors::PlaintextPreprocessor.new }
+describe Winnow::Preprocessors::Plaintext do
+  subject { Winnow::Preprocessors::Plaintext.new }
 
   it 'converts a string to an array of chars and indices' do
     str = "abcde"
@@ -11,8 +11,8 @@ describe Winnow::Preprocessors::PlaintextPreprocessor do
   end
 end
 
-describe Winnow::Preprocessors::SourceCodePreprocessor do
-  subject { Winnow::Preprocessors::SourceCodePreprocessor.new(:java) }
+describe Winnow::Preprocessors::SourceCode do
+  subject { Winnow::Preprocessors::SourceCode.new(:java) }
 
   it 'simplifies a string, but remembers correct locations' do
     str = "i = 5"
