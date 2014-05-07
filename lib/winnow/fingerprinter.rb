@@ -1,12 +1,13 @@
 module Winnow
   class Fingerprinter
-    attr_reader :guarantee, :noise
+    attr_reader :guarantee, :noise, :preprocessor
     alias_method :guarantee_threshold, :guarantee
     alias_method :noise_threshold, :noise
 
     def initialize(params)
       @guarantee = params[:guarantee_threshold] || params[:t]
       @noise = params[:noise_threshold] || params[:k]
+      @preprocessor = params[:preprocessor] || Preprocessors::Plaintext.new
     end
 
     def fingerprints(str, params = {})
@@ -36,10 +37,16 @@ module Winnow
     end
 
     def k_grams(str, source)
-      str.chars.each_cons(noise).each_with_index.map do |k_gram, index|
-        location = Location.new(source, index)
-        {value: k_gram.join.hash, location: location}
+      tokens(str).each_cons(noise).map do |tokens_k_gram|
+        value = tokens_k_gram.map { |(char, _)| char }.join.hash
+        location = Location.new(source, tokens_k_gram.first[1])
+
+        {value: value, location: location}
       end
+    end
+
+    def tokens(str)
+      preprocessor.preprocess(str)
     end
   end
 end
