@@ -46,5 +46,11 @@ describe Winnow::Fingerprinter do
       expect(fprint_d.index).to eq 5
       expect(fprint_d.source).to eq "example"
     end
+
+    it 'uses #consistent_hash when possible' do
+      String.any_instance.should_receive(:consistent_hash)
+
+      Winnow::Fingerprinter.new(t: 1, k: 1).fingerprints("a")
+    end
   end
 end

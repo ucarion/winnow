@@ -38,7 +38,7 @@ module Winnow
 
     def k_grams(str, source)
       tokens(str).each_cons(noise).map do |tokens_k_gram|
-        value = tokens_k_gram.map { |(char, _)| char }.join.hash
+        value = hash(tokens_k_gram.map { |(char)| char }.join)
         location = Location.new(source, tokens_k_gram.first[1])
 
         {value: value, location: location}
@@ -47,6 +47,14 @@ module Winnow
 
     def tokens(str)
       preprocessor.preprocess(str)
+    end
+
+    def hash(str)
+      if str.respond_to?(:consistent_hash)
+        str.consistent_hash
+      else
+        str.hash
+      end
     end
   end
 end
