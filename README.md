@@ -134,6 +134,17 @@ precalculate a document's fingerprints and store them somewhere, doing so in
 Ruby will not work unless you're careful to make sure you never restart your
 Ruby runtime.
 
+### A workaround
+
+Winnow looks for the presence of a `String#consistent_hash` method. If it finds
+one, it'll call that rather than call `String#hash`. You can therefore describe
+your own hash function if you want to precalculate fingerprint data.
+
+I've put together a super-simple (but effective) gem called
+[consistent_hash][consistent_hash] that implements exactly this. It's about a
+dozen lines of MRI C code and it'll probably work for you as well.
+
 [swa_paper]: http://theory.stanford.edu/~aiken/publications/papers/sigmod03.pdf
 [wiki_aca]: http://en.wikipedia.org/wiki/Algorithmic_complexity_attack
 [hash_stackoverflow]: http://stackoverflow.com/questions/23331725/why-are-ruby-hash-methods-randomized
+[consistent_hash]: https://github.com/ucarion/consistent_hash
