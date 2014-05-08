@@ -17,6 +17,25 @@ This library implements a fingerprinting algorithm called *winnowing*, described
 by Saul Schleimer, Daniel S. Wilkerson, and Alex Aiken in a paper titled
 [*Winnowing: Local Algorithms for Document Fingerprinting*][swa_paper].
 
+Winnowing is perfect for when you want to precalculate fingerprints about some
+string. However, due to an issue with how Ruby's `String#hash` works, you might
+run into issues. Please see [the section on caveats][caveat] for more info and a
+workaround.
+
+## Installation
+
+Add this to your Gemfile:
+
+```ruby
+gem 'winnow'
+```
+
+Or install it directly:
+
+```sh
+gem install winnow
+```
+
 ## Usage
 
 The `Fingerprinter` class takes care of fingerprinting documents. To create a
@@ -145,6 +164,7 @@ I've put together a super-simple (but effective) gem called
 dozen lines of MRI C code and it'll probably work for you as well.
 
 [swa_paper]: http://theory.stanford.edu/~aiken/publications/papers/sigmod03.pdf
+[caveat]: #boom-bomb-a-major-caveat-with-stringhash-bomb-boom
 [wiki_aca]: http://en.wikipedia.org/wiki/Algorithmic_complexity_attack
 [hash_stackoverflow]: http://stackoverflow.com/questions/23331725/why-are-ruby-hash-methods-randomized
 [consistent_hash]: https://github.com/ucarion/consistent_hash
