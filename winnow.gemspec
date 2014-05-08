@@ -8,9 +8,10 @@ Gem::Specification.new do |spec|
   spec.version       = Winnow::VERSION
   spec.authors       = ["Ulysse Carion"]
   spec.email         = ["ulyssecarion@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.description   = %q{A tiny Ruby library that implements Winnowing,
+                          an algorithm for document fingerprinting.}
+  spec.summary       = %q{Simple document fingerprinting and plagiarism detection.}
+  spec.homepage      = "https://github.com/ucarion/winnow"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
